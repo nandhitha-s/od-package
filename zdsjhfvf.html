@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dining Philosopher's Problem</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: #e6e6e6;
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        #navbar {
+            overflow: hidden;
+            background-color:#2e3440;
+        }
+        
+        #navbar a {
+            float: left;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        
+        #dropdown {
+            float: right;
+            overflow: hidden;
+            min-width: 260px;
+            /*position: absolute;
+        right:50px;*/
+        }
+        
+        #dropdown #dropbtn {
+            font-size: 20px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+            width: 260px;
+        }
+        
+        #navbar a:hover,
+        #dropdown:hover #dropbtn {
+            background-color:black;
+        }
+        
+        #dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 260px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        
+        #dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+        
+        #dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        
+        #dropdown:hover #dropdown-content {
+            display: block;
+        }
+        
+        #heading {
+            padding-top: 8px;
+            background-color:#434c5e;
+            height: 55px;
+            text-align: center;
+            color: #fff;
+            width: 650px;
+            margin: auto;
+            margin-bottom: 50px;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+        }
+        
+        #display {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+        }
+        
+        #table {
+            border: 2px solid black;
+            border-radius: 150px;
+            height: 285px;
+            width: 45%;
+            margin: auto;
+            margin-left: 175px;
+            margin-top: 195px;
+        }
+        
+        #image {
+            width: 50%;
+        }
+        
+        .philosopher {
+            height: 100px;
+            width: 100px;
+        }
+        
+        #p1 {
+            position: absolute;
+            top: 125px;
+            left: 300px;
+            opacity: 40%;
+        }
+        
+        #p2 {
+            position: absolute;
+            top: 155px;
+            left: 450px;
+            opacity: 40%;
+        }
+        
+        #p3 {
+            position: absolute;
+            top: 235px;
+            left: 530px;
+            opacity: 40%;
+        }
+        
+        #p10 {
+            position: absolute;
+            top: 155px;
+            left: 155px;
+            opacity: 40%;
+        }
+        #p9 {
+            position: absolute;
+            top: 275px;
+            left: 80px;
+            opacity: 40%;
+        }
+        #p4 {
+            position: absolute;
+            top: 350px;
+            left: 550px;
+            opacity: 40%;
+        }
+        #p5 {
+            position: absolute;
+            top: 470px;
+            left: 500px;
+            opacity: 40%;
+        }
+        #p7 {
+            position: absolute;
+            top: 535px;
+            left: 210px;
+            opacity: 40%;
+        }
+        #p6 {
+            position: absolute;
+            top: 535px;
+            left: 365px;
+            opacity: 40%;
+        }
+        #p8 {
+            position: absolute;
+            top: 430px;
+            left: 105px;
+            opacity: 40%;
+        }
+        
+        
+        
+        .chopstick {
+            height: 70px;
+            width: 70px;
+        }
+        
+        /*#c0 {
+            position: absolute;
+            top: 255px;
+            left: 275px;
+            transform: rotate(255deg);
+        }
+        
+        #c1 {
+            position: absolute;
+            top: 255px;
+            left: 355px;
+            transform: rotate(-20deg);
+        }
+        
+        #c2 {
+            position: absolute;
+            top: 270px;
+            left: 440px;
+            transform: rotate(25deg);
+        }
+        
+        #c3 {
+            position: absolute;
+            top: 470px;
+            left: 310px;
+            transform: rotate(112deg);
+        }
+        
+        #c4 {
+            position: absolute;
+            top: 370px;
+            left: 175px;
+            transform: rotate(195deg);
+        }
+        #c5 {
+            position: absolute;
+            top: 370px;
+            left: 175px;
+            transform: rotate(195deg);
+        }#c6 {
+            position: absolute;
+            top: 370px;
+            left: 175px;
+            transform: rotate(195deg);
+        }
+        #c7 {
+            position: absolute;
+            top: 370px;
+            left: 175px;
+            transform: rotate(195deg);
+        }
+        #c8 {
+            position: absolute;
+            top: 370px;
+            left: 175px;
+            transform: rotate(195deg);
+        }
+        #c9 {
+            position: absolute;
+            top: 370px;
+            left: 175px;
+           c
+        
+        }*/
+        /*#c0 {
+            position: absolute;
+            top: 100px;
+            left: 270px;
+
+        }
+        
+        #c1 {
+            position: absolute;
+            top: 80px;
+            left: 350px;
+        }
+        
+        #c2 {
+            position: absolute;
+            top: 90px;
+            left: 430px;
+        }
+        
+        #c3 {
+            position: absolute;
+            top: 160px;
+            left: 480px;
+        }
+        
+        #c4 {
+            position: absolute;
+            top: 240px;
+            left: 430px;
+        }
+        
+        #c5 {
+            position: absolute;
+            top: 310px;
+            left: 350px;
+        }
+        
+        #c6 {
+            position: absolute;
+            top: 330px;
+            left: 270px;
+        }
+        
+        #c7 {
+            position: absolute;
+            top: 310px;
+            left: 190px;
+        }
+        
+        #c8 {
+            position: absolute;
+            top: 240px;
+            left: 110px;
+        }
+        
+        #c9 {
+            position: absolute;
+            top: 160px;
+            left: 60px;
+        } */
+
+        
+        #main-bowl {
+            position: absolute;
+            top: 340px;
+            left: 285px;
+            height: 100px;
+            width: 100px;
+        }
+        
+        .noodle-bowl {
+            height: 60px;
+            width: 60px;
+        }
+        
+        #b1 {
+            position: absolute;
+            top: 253px;
+            left: 310px;
+            opacity: 0%;
+        }
+        
+        #b2 {
+            position: absolute;
+            top: 315px;
+            left: 417px;
+            opacity: 0%;
+        }
+        
+        #b3 {
+            position: absolute;
+            top: 445px;
+            left: 395px;
+            opacity: 0%;
+        }
+        
+        #b4 {
+            position: absolute;
+            top: 445px;
+            left: 225px;
+            opacity: 0%;
+        }
+        
+        #blank {
+            height: 57px;
+        }
+        
+        #b5 {
+            position: absolute;
+            top: 315px;
+            left: 188px;
+            opacity: 0%;
+        }
+        
+        #working {
+            width: 50%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            border-left: 2px solid gray;
+        }
+        
+        #user-inp {
+            text-align: center;
+            margin: 13px auto;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        
+        #pno-inputs {
+            display: flex;
+            flex-direction: row;
+            margin: 10px 100px;
+            color: #6b6969;
+        }
+        
+        input {
+            width: 10%;
+            margin: 10px auto;
+            padding: 8px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        
+        button {
+            width: 25%;
+            margin: 0px auto;
+            color: white;
+            background-color: #6b6969;
+            border: 1px solid black;
+            padding: 6px;
+            border-radius: 10px;
+        }
+        
+        #st-list {
+            border: 2px solid black;
+            border-radius: 8px;
+            width: 90%;
+            height: auto;
+            margin: 15px auto;
+            background: #f4f4f4c4;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        li {
+            list-style-type: none;
+            margin-top: 4px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="navbar">
+        <a href="index.html">Dining Philosopher's Problem</a>
+    
+    </div>
+
+
+
+    <section id="display">
+        <div id="image">
+            <div id="table"></div>
+            <img src="images/p1.png" alt="" class="philosopher" id="p1">
+            <img src="images/p1.png" alt="" class="philosopher" id="p2">
+            <img src="images/p1.png" alt="" class="philosopher" id="p3">
+            <img src="images/p1.png" alt="" class="philosopher" id="p4">
+            <img src="images/p1.png" alt="" class="philosopher" id="p5">
+            <img src="images/p1.png" alt="" class="philosopher" id="p6">
+            <img src="images/p1.png" alt="" class="philosopher" id="p7">
+            <img src="images/p1.png" alt="" class="philosopher" id="p8">
+            <img src="images/p1.png" alt="" class="philosopher" id="p9">
+            <img src="images/p1.png" alt="" class="philosopher" id="p10">
+
+            <!--<img src="images/c1.png" alt="" class="chopstick" id="c0">
+            <img src="images/c1.png" alt="" class="chopstick" id="c1">
+            <img src="images/c1.png" alt="" class="chopstick" id="c2">
+            <img src="images/c1.png" alt="" class="chopstick" id="c3">
+            <img src="images/c1.png" alt="" class="chopstick" id="c4">
+            <img src="images/c1.png" alt="" class="chopstick" id="c5">
+            <img src="images/c1.png" alt="" class="chopstick" id="c6">
+            <img src="images/c1.png" alt="" class="chopstick" id="c7">
+            <img src="images/c1.png" alt="" class="chopstick" id="c8">
+            <img src="images/c1.png" alt="" class="chopstick" id="c9">-->
+            <img src="images/n1.png" alt="" id="main-bowl">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b1">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b2">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b3">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b4">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b5">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b6">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b7">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b8">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b9">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b10">
+            <div id="blank"></div>
+        </div>
+        <!--<div id="working">
+            <p id="user-inp">Enter the sequence in which the philosophers will eat the noodles</p>
+            <div id="pno-inputs">
+                <input type="text" name="pno1" id="pno1" value="1" style="background-color:#8f9cac;">
+                <input type="text" name="pno2" id="pno2" value="2"style="background-color: #8f9cac;">
+                <input type="text" name="pno3" id="pno3" value="3"style="background-color: #8f9cac;">
+                <input type="text" name="pno4" id="pno4" value="4"style="background-color:#8f9cac;">
+                <input type="text" name="pno5" id="pno5" value="5"style="background-color: #8f9cac;">
+            </div>
+            <small id="help"></small>
+            <button id="eat" style="background-color:#434c5e;">Eat</button>
+            <p id="status">
+            <ul id="st-list"></ul-->
+                <div id="working">
+                    <label for="philosopherCount" id="user-inp">Enter the number of philosophers:</label>
+                    <input type="number" id="philosopherCount" min="1" max="10" value="1">
+                    <small id="help"></small>
+                    <button id="eat">Eat</button>
+                    <!-- <p id="status"> -->
+                    <ul id="st-list"></ul>
+            
+                </div>
+        </div>
+    </section>
+</body>
+<!--<script>
+    $(document).ready(function() {
+        let chopsticks = [1, 1, 1, 1, 1];
+        let pno_list = [];
+        let allocated_phil = [];
+        let status = '';
+
+        function getRandomPhilosopherNumber() {
+            let 
+        }
+
+        $("#eat").click(function() {
+            status = '';
+            pno_list = [];
+            allocated_phil = [];
+            for (let i = 0; i < 5; i++) {
+                pno_list.push(getRandomPhilosopherNumber()); // Generate 5 random philosopher numbers
+            }
+            runProcess(pno_list);
+        });
+
+        function runProcess(pno_list) {
+            status += '<li style="color: black;">Checking resource availability for all Philosophers</li>';
+            $("#st-list").html(status);
+            setTimeout(() => {
+                pno_list.forEach(pno => {
+                    if (chopsticks[pno - 1] == 1 && chopsticks[pno % 5] == 1) {
+                        status += '<li style="color: rgb(165,183,169);">Allocating resources to Philosopher ' + pno + '</li>';
+                        allocated_phil.push(pno);
+                        pno_list = $.grep(pno_list, function(value) {
+                            return value != pno;
+                        });
+                        $("#p" + pno).css("opacity", "100%");
+                        $("#b" + pno).css("opacity", "100%");
+                        $("#c" + (pno - 1)).css("opacity", "0%");
+                        $("#c" + (pno % 5)).css("opacity", "0%");
+                        $("#st-list").html(status);
+                        chopsticks[pno - 1] = 0;
+                        chopsticks[pno % 5] = 0;
+                    } else {
+                        status += '<li style="color: blue;">Resources not available for Philosopher ' + pno + '</li>';
+                        $("#st-list").html(status);
+                    }
+                });
+
+                setTimeout(() => {
+                    allocated_phil.forEach(pno => {
+                        status += '<li style="color: black;">Philosopher ' + pno + ' is done eating. Freeing Resources</li>';
+                        $("#p" + pno).css("opacity", "40%");
+                        $("#b" + pno).css("opacity", "0%");
+                        $("#c" + (pno - 1)).css("opacity", "100%");
+                        $("#c" + (pno % 5)).css("opacity", "100%");
+                        $("#st-list").html(status);
+                        chopsticks[pno - 1] = 1;
+                        chopsticks[pno % 5] = 1;
+                        allocated_phil = $.grep(allocated_phil, function(value) {
+                            return value != pno;
+                        });
+                    });
+                    if (pno_list.length != 0) {
+                        runProcess(pno_list)
+                    }
+
+                }, 3000);
+            }, 2000);
+        }
+    });
+</script>-->
+<script>
+    $(document).ready(function() {
+        let chopsticks = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+        let pno_list = [1,2,3,4,5,6,7,8,9,10];
+        let allocated_phil = [];
+        let status = '';
+        //Math.floor(Math.random() * 5) + 1
+        /*function getRandomPhilosopherNumber() {
+            let i = philosopherCount
+            let n = 0
+            pno_list = []
+            while(pno_list.length != i)
+            {
+                n = Math.floor(Math.random() * 5) + 1
+                console.log(n)
+                if(!pno_list.includes(n))
+                {
+                    pno_list.push(n)
+                }
+                n++
+            }
+            return pno_list
+
+        }*/
+
+        $("#eat").click(function() {
+            status = '';     
+            pno_list = [];
+            allocated_phil = [];
+            const philosopherCount = parseInt($("#philosopherCount").val()); // Get the number of philosophers from input field
+ //           getRandomPhilosopherNumber()
+            let i = philosopherCount
+            let n = 0
+            pno_list = []
+            while(pno_list.length != i)
+            {
+                n = Math.floor(Math.random() * 10) + 1
+                console.log(n)
+                if(!pno_list.includes(n))
+                {
+                    pno_list.push(n)
+                }
+                n++
+            }
+            runProcess(pno_list);
+            console.log('hi')
+        });
+
+        function runProcess(pno_list) {
+            status += '<li style="color: black;">Checking resource availability for all Philosophers</li>';
+            $("#st-list").html(status);
+            setTimeout(() => {
+                pno_list.forEach(pno => {
+                    if (chopsticks[pno - 1] == 1 && chopsticks[pno % 10] == 1) {
+                        status += '<li style="color: rgb(165,183,169);">Allocating resources to Philosopher ' + pno + '</li>';
+                        allocated_phil.push(pno);
+                        pno_list = $.grep(pno_list, function(value) {
+                            return value != pno;
+                        });
+                        $("#p" + pno).css("opacity", "100%");
+                        $("#b" + pno).css("opacity", "100%");
+                        $("#c" + (pno - 1)).css("opacity", "0%");
+                        $("#c" + (pno % 5)).css("opacity", "0%");
+                        $("#st-list").html(status);
+                        chopsticks[pno - 1] = 0;
+                        chopsticks[pno % 10] = 0;
+                        console.log(pno, chopsticks)
+                    } else {
+                        status += '<li style="color: blue;">Resources not available for Philosopher ' + pno + '</li>';
+                        $("#st-list").html(status);
+                    }
+                });
+
+                setTimeout(() => {
+                    allocated_phil.forEach(pno => {
+                        status += '<li style="color: black;">Philosopher ' + pno + ' is done eating. Freeing Resources</li>';
+                        $("#p" + pno).css("opacity", "40%");
+                        $("#b" + pno).css("opacity", "0%");
+                        //$("#c" + (pno - 1)).css("opacity", "100%");
+                        //$("#c" + (pno % 5)).css("opacity", "100%");
+                        $("#st-list").html(status);
+                        chopsticks[pno - 1] = 1;
+                        chopsticks[pno % 10] = 1;
+                        allocated_phil = $.grep(allocated_phil, function(value) {
+                            return value != pno;
+                        });
+                    });
+                    if (pno_list.length != 0) {
+                        runProcess(pno_list)
+                    }
+
+                }, 3000);
+            }, 2000);
+        }
+    });
+</script>
+
+</html>
