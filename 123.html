@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dining Philosopher's Problem</title>
+    <style>
+        /* Your CSS styles for visualization */
+        .philosopher {
+            border: 2px solid black;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            margin: 20px;
+            text-align: center;
+            line-height: 100px;
+        }
+        .eating {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <label for="philosopherCount">Enter the number of philosophers:</label>
+    <input type="number" id="philosopherCount" min="1" max="10" value="1">
+    <button onclick="startSimulation()">Start Simulation</button>
+    <div id="philosopherContainer"></div>
+
+    <script>
+        function startSimulation() {
+            // Clear previous simulation
+            document.getElementById('philosopherContainer').innerHTML = '';
+
+            // Get number of philosophers from input
+            const philosopherCount = parseInt(document.getElementById('philosopherCount').value);
+
+            // Create philosopher elements
+            for (let i = 1; i <= philosopherCount; i++) {
+                const philosopher = document.createElement('div');
+                philosopher.className = 'philosopher';
+                philosopher.textContent = 'Philosopher ' + i;
+                document.getElementById('philosopherContainer').appendChild(philosopher);
+            }
+
+            // Generate random sequence of philosophers
+            const sequence = generateSequence(philosopherCount);
+
+            // Start the simulation
+            simulateEating(sequence);
+        }
+
+        function generateSequence(count) {
+            // Generate a random sequence of philosopher numbers
+            const sequence = [];
+            for (let i = 1; i <= count; i++) {
+                sequence.push(i);
+            }
+            // Shuffle the sequence
+            for (let i = sequence.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [sequence[i], sequence[j]] = [sequence[j], sequence[i]];
+            }
+            return sequence;
+        }
+
+        function simulateEating(sequence) {
+            let currentIndex = 0;
+            const philosophers = document.getElementsByClassName('philosopher');
+
+            // Function to highlight the current philosopher
+            function highlightPhilosopher(index) {
+                // Remove highlight from all philosophers
+                for (let i = 0; i < philosophers.length; i++) {
+                    philosophers[i].classList.remove('eating');
+                }
+                // Highlight the philosopher at given index
+                if (index !== undefined && index >= 0 && index < philosophers.length) {
+                    philosophers[index].classList.add('eating');
+                }
+            }
+
+            // Simulate eating process
+            const interval = setInterval(() => {
+                highlightPhilosopher(sequence[currentIndex] - 1);
+                currentIndex++;
+                if (currentIndex >= sequence.length) {
+                    currentIndex = 0; // Loop back to the beginning of the sequence
+                }
+            }, 2000); // Change this value to adjust the speed of simulation
+        }
+    </script>
+</body>
+</html>

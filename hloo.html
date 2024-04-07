@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dining Philosopher's Problem</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /* CSS styles for visualization */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e6e6e6;
+        }
+
+        #display {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+        }
+
+        #table {
+            border: 2px solid black;
+            border-radius: 150px;
+            height: 285px;
+            width: 45%;
+            margin: auto;
+            margin-left: 175px;
+            margin-top: 195px;
+        }
+
+        .philosopher {
+            height: 100px;
+            width: 100px;
+        }
+
+        .eating {
+            background-color: green;
+        }
+
+        .chopstick {
+            height: 70px;
+            width: 70px;
+        }
+
+        .noodle-bowl {
+            height: 60px;
+            width: 60px;
+        }
+
+        #main-bowl {
+            position: absolute;
+            top: 340px;
+            left: 285px;
+            height: 100px;
+            width: 100px;
+        }
+
+        #blank {
+            height: 57px;
+        }
+
+        #st-list {
+            border: 2px solid black;
+            border-radius: 8px;
+            width: 90%;
+            height: auto;
+            margin: 15px auto;
+            background: #f4f4f4c4;
+            text-align: center;
+            padding: 15px;
+        }
+
+        li {
+            list-style-type: none;
+            margin-top: 4px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="display">
+        <div id="image">
+            <div id="table"></div>
+            <!-- Placeholder images for philosophers -->
+            <img src="images/p1.png" alt="" class="philosopher" id="p1">
+            <img src="images/p1.png" alt="" class="philosopher" id="p2">
+            <img src="images/p1.png" alt="" class="philosopher" id="p3">
+            <img src="images/p1.png" alt="" class="philosopher" id="p4">
+            <img src="images/p1.png" alt="" class="philosopher" id="p5">
+            <img src="images/p1.png" alt="" class="philosopher" id="p6">
+            <img src="images/p1.png" alt="" class="philosopher" id="p7">
+            <img src="images/p1.png" alt="" class="philosopher" id="p8">
+            <img src="images/p1.png" alt="" class="philosopher" id="p9">
+            <img src="images/p1.png" alt="" class="philosopher" id="p10">
+            <!-- Placeholder images for chopsticks -->
+            <!-- Adjust IDs for chopsticks accordingly -->
+            <img src="images/c1.png" alt="" class="chopstick" id="c0">
+            <img src="images/c1.png" alt="" class="chopstick" id="c1">
+            <img src="images/c1.png" alt="" class="chopstick" id="c2">
+            <img src="images/c1.png" alt="" class="chopstick" id="c3">
+            <img src="images/c1.png" alt="" class="chopstick" id="c4">
+            <!-- Placeholder image for main noodle bowl -->
+            <img src="images/n1.png" alt="" id="main-bowl">
+            <!-- Placeholder images for individual noodle bowls -->
+            <!-- Adjust IDs for noodle bowls accordingly -->
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b1">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b2">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b3">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b4">
+            <img src="images/n1.png" alt="" class="noodle-bowl" id="b5">
+            <div id="blank"></div>
+        </div>
+        <div id="working">
+            <label for="philosopherCount" id="user-inp">Enter the number of philosophers:</label>
+            <input type="number" id="philosopherCount" min="1" max="10" value="1">
+            <small id="help"></small>
+            <button id="eat">Eat</button>
+            <ul id="st-list"></ul>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            let chopsticks = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+            let pno_list = [];
+            let allocated_phil = [];
+            let status = '';
+
+            $("#eat").click(function () {
+                status = '';
+                pno_list = [];
+                allocated_phil = [];
+                const philosopherCount = parseInt($("#philosopherCount").val()); // Get the number of philosophers from input field
+                let i = philosopherCount;
+                let n = 0;
+                while (pno_list.length != i) {
+                    n = Math.floor(Math.random() * 10) + 1;
+                    if (!pno_list.includes(n)) {
+                        pno_list.push(n);
+                    }
+                    n++;
+                }
+                runProcess(pno_list, philosopherCount);
+            });
+
+            function runProcess(pno_list, philosopherCount) {
+                status += '<li style="color: black;">Checking resource availability for all Philosophers</li>';
+                $("#st-list").html(status);
+                setTimeout(() => {
+                    pno_list.forEach(pno => {
+                        if (chopsticks[pno - 1] == 1 && chopsticks[pno % philosopherCount] == 1) {
+                            status += '<li style="color: rgb(165,183,169);">Allocating resources to Philosopher ' + pno + '</li>';
+                            allocated_phil.push(pno);
+                            pno_list = $.grep(pno_list, function (value) {
+                                return value != pno;
+                            });
+                            $("#p" + pno).css("opacity", "100%");
+                            $("#b" + pno).css("opacity", "100%");
+                            $("#c" + (pno - 1)).css("opacity", "0%");
+                            $("#c" + (pno % philosopherCount)).css("opacity", "0%");
+                            $("#st-list").html(status);
+                            chopsticks[pno - 1] = 0;
+                            chopsticks[pno % philosopherCount] = 0;
+                        } else {
+                            status += '<li style="color: blue;">Resources not available for Philosopher ' + pno + '</li>';
+                            $("#st-list").html(status);
+                        }
+                    });
+
+                    setTimeout(() => {
+                        allocated_phil.forEach(pno => {
+                            status += '<li style="color: black;">Philosopher ' + pno + ' is done eating. Freeing Resources</li>';
+                            $("#p" + pno).css("opacity", "40%");
+                            $("#b" + pno).css("opacity", "0%");
+                            $("#c" + (pno - 1)).css("opacity", "100%");
+                            $("#c" + (pno % philosopherCount)).css("opacity", "100%");
+                            $("#st-list").html(status);
+                            chopsticks[pno - 1] = 1;
+                            chopsticks[pno % philosopherCount] = 1;
+                            allocated_phil = $.grep(allocated_phil, function (value) {
+                                return value != pno;
+                            });
+                        });
+                        if (pno_list.length != 0) {
+                            runProcess(pno_list, philosopherCount);
+                        }
+
+                    }, 3000);
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dining Philosophers</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f5f5f5;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .table {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: url('images/n1.png') no-repeat center center;
+        background-size: contain;
+    }
+
+    .philosopher {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background: url('images/p1.png') no-repeat center center;
+        background-size: contain;
+        transition: opacity 0.3s ease;
+    }
+
+    .chopstick {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: url('images/c1.png') no-repeat center center;
+        background-size: contain;
+    }
+
+    .input-group {
+        margin-top: 20px;
+    }
+
+    input[type="number"] {
+        width: 50px;
+        padding: 5px;
+        font-size: 16px;
+    }
+
+    button {
+        padding: 8px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .message {
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="table">
+        <div class="philosopher" id="philosopher1"></div>
+        <div class="philosopher" id="philosopher2"></div>
+        <div class="philosopher" id="philosopher3"></div>
+        <div class="philosopher" id="philosopher4"></div>
+        <div class="philosopher" id="philosopher5"></div>
+        <div class="chopstick" style="top: 40%; left: 45%;"></div>
+        <div class="chopstick" style="top: 20%; left: 25%;"></div>
+        <div class="chopstick" style="top: 45%; left: 70%;"></div>
+        <div class="chopstick" style="top: 70%; left: 35%;"></div>
+        <div class="chopstick" style="top: 60%; left: 60%;"></div>
+    </div>
+    <div class="input-group">
+        <input type="number" id="numPhilosophers" min="1" max="5" placeholder="Enter number of philosophers">
+        <button onclick="startEating()">Eat</button>
+    </div>
+    <div class="message" id="message"></div>
+</div>
+
+<script>
+    function startEating() {
+        const numPhilosophers = document.getElementById('numPhilosophers').value;
+        const eatingIndex = Math.floor(Math.random() * numPhilosophers) + 1;
+
+        for (let i = 1; i <= 5; i++) {
+            const philosopher = document.getElementById(`philosopher${i}`);
+            philosopher.style.opacity = (i === eatingIndex) ? '1' : '0.4';
+        }
+
+        document.getElementById('message').innerText = `Philosopher ${eatingIndex} is eating.`;
+    }
+</script>
+</body>
+</html>
